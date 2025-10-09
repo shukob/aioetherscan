@@ -21,15 +21,14 @@ class Client:
     def __init__(
         self,
         api_key: str,
-        api_kind: str = 'eth',
-        network: str = 'main',
+        chain_id: int = 1,
         loop: AbstractEventLoop = None,
         timeout: ClientTimeout = None,
         proxy: str = None,
         throttler: AsyncContextManager = None,
         retry_options: RetryOptionsBase = None,
     ) -> None:
-        self._url_builder = UrlBuilder(api_key, api_kind, network)
+        self._url_builder = UrlBuilder(api_key, chain_id)
         self._http = Network(self._url_builder, loop, timeout, proxy, throttler, retry_options)
 
         self.account = Account(self)
@@ -47,10 +46,6 @@ class Client:
     @property
     def currency(self) -> str:
         return self._url_builder.currency
-
-    @property
-    def api_kind(self) -> str:
-        return self._url_builder.api_kind.title()
 
     @property
     def scaner_url(self) -> str:
