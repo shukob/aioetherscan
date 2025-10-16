@@ -11,6 +11,11 @@ class BaseModule(ABC):
         """Returns API module name."""
 
     async def _get(self, **params):
+        # --- Patch start ---
+        for k, v in list(params.items()):
+            if isinstance(v, bool):
+                params[k] = "true" if v else "false"
+        # --- Patch end ---
         return await self._client._http.get(params={**dict(module=self._module), **params})
 
     async def _post(self, **params):
